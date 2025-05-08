@@ -1,4 +1,4 @@
-package com.todo.todo_app;
+package com.todo.todo_app.controller;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -10,59 +10,38 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller
-public class TodoController {
-    private List<Todo> todos;
-    private static int idCounter;
+import com.todo.todo_app.model.Todo;
+import com.todo.todo_app.service.TodoService;
 
-    public TodoController(List<Todo> todos) {
-        this.todos = todos;
-    }
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+public class TodoController {
+    private final TodoService service;
 
     @GetMapping("/")
     public String home(Model model) {
+        List<Todo> todos = service.getTodos();
         model.addAttribute("todos", todos);
         return "index";
     }
 
     @PostMapping("/add")
     public String addTodo(@RequestParam String task) {
-        if (!task.isEmpty() && !task.isBlank()) {
-            Todo todo = new Todo();
-            todo.setId(++idCounter);
-            todo.setTask(task);
-
-            for (Todo existingTodo : todos) {
-                if (existingTodo.getTask().equals(task)) {
-                    return "redirect:/";
-                }
-            }
-
-            todos.add(todo);
-        }
-
+        service.addTodo(task);
         return "redirect:/";
     }
 
     @GetMapping("/toggle/{id}")
     public String toggleTodo(@PathVariable int id) {
-        for (Todo todo : todos) {
-            if (todo.getId() == id) {
-                todo.setCompleted(!todo.isCompleted());
-                break;
-            }
-        }
+        service.toggleTodo(id);
         return "redirect:/";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteTodo(@PathVariable int id) {
-        for (Todo todo : todos) {
-            if (todo.getId() == id) {
-                todos.remove(todo);
-                break;
-            }
-        }
+        service.deleteTodo(id);
         return "redirect:/";
     }
 }

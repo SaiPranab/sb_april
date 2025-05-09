@@ -2,24 +2,22 @@ package com.jt.jt_blogs.service;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.jt.jt_blogs.model.Blog;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BlogService {
-    public List<Blog> getBlogs() {
-        var blog1 = new Blog(1, "Exploring Java Streams",
-                "A deep dive into Java Stream API and its powerful features.");
+        private static final String BLOG_TABLE = "blogs";
+        private final JdbcTemplate jdbcTemplate;
 
-        var blog2 = new Blog(2, "Introduction to Spring Boot",
-                "Getting started with Spring Boot for building RESTful APIs.");
-
-        var blog3 = new Blog(3, "Understanding Docker",
-                "Basics of Docker containers and how to use them in development.");
-
-        var blog4 = new Blog(4, "Effective Git Practices", "Tips and tricks for efficient version control with Git.");
-
-        return List.of(blog1, blog2, blog3, blog4);
-    }
+        public List<Blog> getBlogs() {
+                var sql = "SELECT * FROM " + BLOG_TABLE;
+                return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Blog.class));
+        }
 }

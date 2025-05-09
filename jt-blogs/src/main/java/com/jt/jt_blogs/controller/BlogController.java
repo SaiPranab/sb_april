@@ -13,10 +13,14 @@ import lombok.RequiredArgsConstructor;
 public class BlogController {
     private final BlogService blogService;
 
-    // @GetMapping("/")
     @GetMapping
     public String home(Model model) {
         model.addAttribute("blogs", blogService.getBlogs());
         return "home";
+    }
+
+    @GetMapping("/form")
+    public String form() {
+        return "add-blog";
     }
 }

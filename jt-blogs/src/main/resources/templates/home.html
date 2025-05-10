@@ -12,13 +12,15 @@
         </div>
 
         <section class="container mt-3">
-            <div th:each="blog, field : ${blogs}" class="p-3 shadow-lg rounded my-3 ">
+            <div th:each="blog, field : ${blogs}" class="p-3 shadow-lg rounded my-3 " onclick="handleOnHeadingClick()">
                 <h3
                     th:text="| ${(field.index + 1)  < 10 ? '0'+(field.index + 1)  : (field.index+1)}. ${blog.heading} |">
                 </h3>
             </div>
         </section>
     </main>
+
+    <script src="/js/home.js"></script>
 </body>
 
 </html>

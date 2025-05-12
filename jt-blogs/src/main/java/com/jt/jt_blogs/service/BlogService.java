@@ -41,4 +41,9 @@ public class BlogService {
 
                 // jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Blog.class));
         }
+
+        public void delete(int id) {
+                var sql = "DELETE FROM %s WHERE id = ?".formatted(BLOG_TABLE);
+                jdbcTemplate.update(sql, id);
+        }
 }

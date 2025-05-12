@@ -1,3 +1,3 @@
-function handleOnHeadingClick() {
-    console.log("heading clicked !");
+function handleOnHeadingClick(id) {
+    window.location.href = "/blog/" + id
 }

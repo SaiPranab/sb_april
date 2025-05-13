@@ -7,9 +7,7 @@
     <header th:replace="~{common/fragment :: header}"></header>
 
     <main class="container-fluid">
-        <div class="container-fluid text-end">
-            <a href="/form" class="btn btn-primary">ADD Blog</a>
-        </div>
+        <div th:replace="~{common/fragment :: backBtn('Add Blog', '/form')}"></div>
 
         <section class="container mt-3">
             <div th:each="blog, field : ${blogs}"

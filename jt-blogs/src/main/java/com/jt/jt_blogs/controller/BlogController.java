@@ -56,4 +56,11 @@ public class BlogController {
         model.addAttribute("blog", blog);
         return "edit-blog";
     }
+
+    @PostMapping("/update-blog")
+    public String updateBlog(@ModelAttribute Blog blog,
+            PrintWriter pw) {
+        blogService.updateBlog(blog);
+        return "redirect:/";
+    }
 }

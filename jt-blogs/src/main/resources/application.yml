@@ -1,0 +1,19 @@
+# spring.application.name=jt-blogs
+
+# server.port=1205
+
+# spring.datasource.url=jdbc:mysql://localhost/blog
+# spring.datasource.username=root
+# spring.datasource.password=root
+
+spring:
+  application:
+    name: jt-blogs
+
+  datasource:
+    url: jdbc:mysql://localhost/blog?createDatabaseIfNotExist=true
+    username: root
+    password: root
+
+server:
+  port: 1205

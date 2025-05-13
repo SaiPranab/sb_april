@@ -8,19 +8,21 @@
     <header th:replace="~{common/fragment :: header}"></header>
 
     <main class="container mt-3 p-3">
-        <div th:replace="~{common/fragment :: backBtn}"></div>
+        <div th:replace="~{common/fragment :: backBtn('Back', '/')}"></div>
 
         <div class="container mt-3 p-3 shadow-lg rounded-3">
             <h3 class="text-center">Edit blog</h3>
             <hr>
 
-            <form action="/update-blog" method="post">
+            <form action="/update-blog" th:object="${blog}" method="post">
+
+                <input type="text" name="id" th:field="*{id}" hidden>
+
                 <label for="blogHeading" class="form-label">Enter heading</label>
-                <input type="text" id="blogHeading" class="form-control" name="heading" th:value="${blog.heading}"
-                    required>
+                <input type="text" id="blogHeading" class="form-control" name="heading" th:field="*{heading}" required>
 
                 <label for="blogDescription" class="form-label">Enter description</label>
-                <textarea id="blogDescription" class="form-control" name="description" th:text="${blog.description}"
+                <textarea id="blogDescription" class="form-control" name="description" th:field="*{description}"
                     required></textarea>
 
                 <br>

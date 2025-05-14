@@ -1,0 +1,1 @@
+INSERT INTO blogs (heading, description) VALUES ('Core Java For Beginners', 'Deep Dive into Core Java Under The Guidance of Rashmi Sir');

@@ -21,31 +21,23 @@ public class BlogService {
         private final BlogRepository blogRepository;
 
         public List<Blog> getBlogs() {
-                return blogRepository.findAll(); // findAll() - extract all rows from the table
+                return blogRepository.findAll();
         }
 
         public void addBlog(Blog blog) {
-                blogRepository.save(blog); // save - insert row into table
+                blogRepository.save(blog);
         }
 
         public Blog getBlogById(int id) {
                 return blogRepository.findById(id)
                                 .orElseThrow(() -> new RuntimeException("Blog not found with id " + id));
-
-                // findById() -> it extract a row by matching the primary key
         }
 
         public void delete(int id) {
-                var sql = "DELETE FROM %s WHERE id = ?".formatted(BLOG_TABLE);
-                jdbcTemplate.update(sql, id);
+                blogRepository.delete(getBlogById(id));
         }
 
-        public void updateBlog(Blog blog) {
-                var id = blog.getId();
-                var heading = blog.getHeading();
-                var description = blog.getDescription();
-
-                var sql = "UPDATE %s SET heading = ?, description = ? WHERE id = ?".formatted(BLOG_TABLE);
-                jdbcTemplate.update(sql, heading, description, id);
+        public void updateBlog(Blog newBlog) {
+                blogRepository.save(newBlog);
         }
 }

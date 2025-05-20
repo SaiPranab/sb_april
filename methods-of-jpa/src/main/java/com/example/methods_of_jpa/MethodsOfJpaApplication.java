@@ -1,6 +1,8 @@
 package com.example.methods_of_jpa;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -55,9 +57,55 @@ public class MethodsOfJpaApplication implements CommandLineRunner {
 
 		// PAGINATION
 		// Page<Product> products4 = productRepository.findAll(PageRequest.of(0, 3));
-		Page<Product> products4 = productRepository.findAll(PageRequest.of(0, 5,
-				Sort.by(Direction.DESC, "productprice")));
-		products4.forEach(System.out::println);
+		// Page<Product> products4 = productRepository.findAll(PageRequest.of(0, 5,
+		// Sort.by(Direction.DESC, "productprice")));
+		// products4.forEach(System.out::println);
+
+		// FIND BY ID
+		// Optional<Product> optProduct =
+		// productRepository.findById("34ceb32f-3349-450d-b379-015c72e84da5");
+		// Product existingProduct = optProduct.orElseThrow(() -> new
+		// NoSuchElementException("product not found by id "));
+		// System.out.println("find by id " + existingProduct);
+
+		// SAVE or UPDATE -> if the id already exist in the table then update the obj
+		// otherwise insert the obj
+		// Optional<Product> optProduct =
+		// productRepository.findById("34ceb32f-3349-450d-b379-015c72e84da5");
+		// Product existingProduct = optProduct.orElseThrow(() -> new
+		// NoSuchElementException("product not found by id "));
+
+		// System.out.println("before update " + existingProduct);
+
+		// existingProduct.setProductName("Iphone 18 pro max");
+		// existingProduct.setProductprice(145000.99);
+
+		// Product savedProduct = productRepository.save(existingProduct);
+		// System.out.println("after update " + savedProduct);
+
+		// FINY BY PRODUCT NAME
+		// Optional<Product> optProductByName = productRepository
+		// .findByProductName("Iphone 17 pro max");
+		// Product productByName = optProductByName.orElseThrow();
+		// System.out.println("produt by name " + productByName);
+
+		// FIND ALL BY PRODUCT PRICE BETWEEN
+		// List<Product> productsBetweenRange =
+		// productRepository.findAllByProductpriceBetween(6000.00, 9000.00);
+		// productsBetweenRange.forEach(System.out::println);
+
+		// FIND ALL BY PRODUCT PRICE GREATER THAN
+		// List<Product> productsGreaterThanPrice =
+		// productRepository.findAllByProductpriceGreaterThan(9000.00,
+		// Sort.by(Direction.ASC, "productprice"));
+
+		// productsGreaterThanPrice.forEach(System.out::println);
+
+		// FIND BY PRODUCT PRICE AND PRODUCT BRAND
+		Optional<Product> productByPriceAndbrand = productRepository.findByProductpriceAndProductBrand(150000.99,
+				"Apple");
+		System.out.println("produc by price and brand " + productByPriceAndbrand.orElseThrow());
+
 	}
 
 	private List<Product> getProducts() {

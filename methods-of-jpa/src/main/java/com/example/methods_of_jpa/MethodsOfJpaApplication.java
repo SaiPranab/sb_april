@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
@@ -46,7 +47,7 @@ public class MethodsOfJpaApplication implements CommandLineRunner {
 				"is apple product exists " + productRepository.existsById("da513078-080b-4113-92d6-5ba1454bb2c0"));
 
 		// DELTE By ID
-		productRepository.deleteById("da513078-080b-4113-92d6-5ba1454bb2c0");
+		// productRepository.deleteById("da513078-080b-4113-92d6-5ba1454bb2c0");
 
 		// FiND ALL
 		List<Product> products2 = productRepository.findAll();
@@ -102,10 +103,20 @@ public class MethodsOfJpaApplication implements CommandLineRunner {
 		// productsGreaterThanPrice.forEach(System.out::println);
 
 		// FIND BY PRODUCT PRICE AND PRODUCT BRAND
-		Optional<Product> productByPriceAndbrand = productRepository.findByProductpriceAndProductBrand(150000.99,
-				"Apple");
-		System.out.println("produc by price and brand " + productByPriceAndbrand.orElseThrow());
+		// Optional<Product> productByPriceAndbrand =
+		// productRepository.findByProductpriceAndProductBrand(150000.99, "Apple");
+		// System.out.println("produc by price and brand " +
+		// productByPriceAndbrand.orElseThrow());
 
+		Optional<Product> productByPriceAndbrand = productRepository.getProduct2("Apple", 150000.99);
+		System.out.println("product by brand and name " + productByPriceAndbrand);
+
+		transactionConcept();
+	}
+
+	public void transactionConcept() {
+		int affectedRow = productRepository.updateprice(170000.99, "Apple");
+		System.out.println("No. of rows are affected " + affectedRow);
 	}
 
 	private List<Product> getProducts() {

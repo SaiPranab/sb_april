@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 
 import com.example.sms.entity.Student;
+import com.example.sms.exception.StudentNotFoundException;
 import com.example.sms.respository.StudentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class StudentService {
 
     public Student getStudentById(String id) {
         var existingStudent = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Student not found with id :- " + id));
+                .orElseThrow(() -> new StudentNotFoundException("Student not found with id :- " + id));
 
         return existingStudent;
     }

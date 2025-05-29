@@ -1,6 +1,9 @@
 server:
   port: 1200
 
+  servlet:
+    context-path: /sms
+
 spring:
   application:
     name: sms

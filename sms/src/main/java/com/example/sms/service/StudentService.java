@@ -30,4 +30,16 @@ public class StudentService {
     public Student saveStudent(Student newStudent) {
         return repository.save(newStudent);
     }
+
+    public void deleteStudentById(String id) {
+        var existingStudent = getStudentById(id);
+        repository.delete(existingStudent);
+    }
+
+    public Student updateStudentById(String studentId, Student student) {
+        getStudentById(studentId);
+        student.setStudentId(studentId);
+
+        return repository.save(student);
+    }
 }

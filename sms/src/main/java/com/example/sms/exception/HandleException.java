@@ -57,11 +57,11 @@ public class HandleException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handler(MethodArgumentNotValidException e) {
-        var details = new StringJoiner(",");
+        var details = new StringJoiner(", ");
         e.getAllErrors().forEach(error -> {
             var errorMessage = error.getDefaultMessage();
             var fieldName = ((FieldError) error).getField();
-            details.add(fieldName + " -> " + errorMessage);
+            details.add(fieldName + " : " + errorMessage);
         });
 
         var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, details.toString());

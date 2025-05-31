@@ -69,4 +69,9 @@ public class HandleException {
         problemDetail.setProperty("timestamp", LocalDateTime.now());
         return problemDetail;
     }
+
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail handlException(Exception e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
 }

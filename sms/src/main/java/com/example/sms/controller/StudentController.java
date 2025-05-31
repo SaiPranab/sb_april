@@ -2,6 +2,7 @@ package com.example.sms.controller;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.sms.dto.StudentDTO;
 import com.example.sms.entity.Student;
 import com.example.sms.service.StudentService;
 
@@ -38,7 +40,10 @@ public class StudentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Student createStudent(@Valid @RequestBody Student newStudent) {
+    public StudentDTO createStudent(@Valid @RequestBody StudentDTO studentDTO) {
+        Student newStudent = new Student();
+        BeanUtils.copyProperties(studentDTO, newStudent);
+
         return service.saveStudent(newStudent);
     }
 

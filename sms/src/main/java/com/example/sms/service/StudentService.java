@@ -3,8 +3,10 @@ package com.example.sms.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.example.sms.dto.StudentDTO;
 import com.example.sms.entity.Student;
 import com.example.sms.exception.StudentNotFoundException;
 import com.example.sms.respository.StudentRepository;
@@ -27,8 +29,13 @@ public class StudentService {
         return existingStudent;
     }
 
-    public Student saveStudent(Student newStudent) {
-        return repository.save(newStudent);
+    public StudentDTO saveStudent(Student newStudent) {
+        var savedStudent = repository.save(newStudent);
+
+        var studentDTO = new StudentDTO();
+        BeanUtils.copyProperties(savedStudent, studentDTO);
+
+        return studentDTO;
     }
 
     public void deleteStudentById(String id) {

@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tastytown.backend.dto.CategoryRequestDTO;
 import com.tastytown.backend.entity.Category;
-import com.tastytown.backend.srevice.CategoryService;
+import com.tastytown.backend.service.ICategoryService;
+import com.tastytown.backend.service.impl.CategoryServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,17 +29,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Tag(name = "Category API", description = "This controller manages CRUD operations for Category Entity")
 public class CategoryController {
-    private final CategoryService categoryService;
+    private final ICategoryService categoryService;
 
     @PostMapping
     @ApiResponse(responseCode = "201", description = "Category Created")
     @Operation(summary = "Create a new Category")
     public ResponseEntity<Category> createCategory(@RequestBody CategoryRequestDTO requestDTO) {
-        // return categoryService.saveCategory(requestDTO);
-
-        // var savedCategory = categoryService.saveCategory(requestDTO);
-        // return new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
-
         return new ResponseEntity<>(categoryService.saveCategory(requestDTO), HttpStatus.CREATED);
     }
 
@@ -52,22 +48,23 @@ public class CategoryController {
     @GetMapping("/{categoryId}")
     @ApiResponse(description = "Get a category by catgeory id")
     @Operation(summary = "Extract a category by category id")
-    public ResponseEntity<Category> getCategoryById(@PathVariable String categoryId){
+    public ResponseEntity<Category> getCategoryById(@PathVariable String categoryId) {
         return ResponseEntity.ok(categoryService.getCategoryById(categoryId));
     }
 
     @PutMapping("/{categoryId}")
     @ApiResponse(description = "Update a category by catgeory id")
     @Operation(summary = "Update a category by category id")
-    public ResponseEntity<Category> updateCategory(@PathVariable String categoryId, 
-                                                @RequestBody CategoryRequestDTO requestDTO) {
+    public ResponseEntity<Category> updateCategory(@PathVariable String categoryId,
+            @RequestBody CategoryRequestDTO requestDTO) {
         return ResponseEntity.ok(categoryService.updateCategoryById(categoryId, requestDTO));
     }
 
     @DeleteMapping("/{categoryId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategoryById(@PathVariable String categoryId){
+    @ApiResponse(responseCode = "204", description = "Delete a category by catgeory id")
+    @Operation(summary = "Delete a category by category id")
+    public ResponseEntity<Void> deleteCategoryById(@PathVariable String categoryId) {
         categoryService.deleteCategoryById(categoryId);
-       
+        return ResponseEntity.noContent().build();
     }
 }

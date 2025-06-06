@@ -1,4 +1,4 @@
-package com.tastytown.backend.srevice;
+package com.tastytown.backend.service.impl;
 
 import java.util.List;
 
@@ -8,12 +8,13 @@ import com.tastytown.backend.dto.CategoryRequestDTO;
 import com.tastytown.backend.entity.Category;
 import com.tastytown.backend.exception.CategoryNotFoundException;
 import com.tastytown.backend.repository.CategoryRepository;
+import com.tastytown.backend.service.ICategoryService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService {
+public class CategoryServiceImpl implements ICategoryService{
     private final CategoryRepository categoryRepository;
 
     public Category saveCategory(CategoryRequestDTO requestDTO) {

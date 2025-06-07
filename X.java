@@ -1,0 +1,1 @@
+public record X(String username, String password) {}

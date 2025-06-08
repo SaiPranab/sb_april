@@ -9,11 +9,13 @@ public class FoodMapper {
     private FoodMapper() {
     }
 
-    public static Food convertToEntity(FoodRequestDTO requestDTO, Category existingCategory) {
+    public static Food convertToEntity(FoodRequestDTO requestDTO, 
+                                Category existingCategory, String fileName) {
        return Food.builder()
                 .foodName(requestDTO.foodName())
                 .foodDescription(requestDTO.foodDescription())
                 .foodPrice(requestDTO.foodPrice())
+                .foodImage(fileName)
                 .category(existingCategory)
                 .build();
 

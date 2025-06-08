@@ -14,3 +14,7 @@ spring:
       ddl-auto: update
 
     show-sql: true
+
+upload:
+  file:
+    dir: images

@@ -5,5 +5,5 @@ import java.io.IOException;
 import org.springframework.http.ResponseEntity;
 
 public interface IImageService {
-    ResponseEntity<byte[]> extractFoodImage(String foodImageName) throws IOException;
+    byte[] extractFoodImage(String foodImageName) throws IOException;
 }

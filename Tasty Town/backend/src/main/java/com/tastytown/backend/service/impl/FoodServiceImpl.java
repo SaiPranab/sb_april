@@ -4,9 +4,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,6 +50,41 @@ public class FoodServiceImpl implements IFoodService {
         var savedFood = foodRepository.save(food);
 
         return FoodMapper.convertToDTO(savedFood);
+    }
+
+    @Override
+    public List<FoodResponseDTO> getAllFoods() {
+        List<Food> foods = foodRepository.findAll();
+        return foods.stream().map(FoodMapper :: convertToDTO).toList();
+    }
+
+    
+    @Override
+    public FoodResponseDTO getFoodById(String foodId) {
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new NoSuchElementException("Food Not Found with id " + foodId));
+
+        return FoodMapper.convertToDTO(food);       
+    }
+
+    @Override
+    public Page<FoodResponseDTO> getPaginatedFoods(int pageNumber, int pageSize, 
+                                                        String categoryId, String search) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        // filternation
+        Page<Food> foodPage ;
+        if(!categoryId.equals("all") && !search.equals("all")) {
+           foodPage = foodRepository.findByCategory_CategoryIdAndFoodNameContainingIgnoreCase(categoryId, search, pageable);
+        }else if(!categoryId.equals("all"))  {
+            foodPage = foodRepository.findByCategory_CategoryId(categoryId, pageable);
+        } else if(!search.equals("all")) {
+            foodPage = foodRepository.findByFoodNameContainingIgnoreCase(search, pageable);
+        }else {
+            foodPage = foodRepository.findAll(pageable);
+        }
+        
+        return foodPage.map(FoodMapper :: convertToDTO);
     }
 
     private String uploadFile(MultipartFile foodImage) throws IOException{

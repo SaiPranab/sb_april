@@ -87,6 +87,52 @@ public class FoodServiceImpl implements IFoodService {
         return foodPage.map(FoodMapper :: convertToDTO);
     }
 
+    @Override
+    public FoodResponseDTO deleteFoodById(String foodId) throws IOException{
+        var food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new NoSuchElementException("Food Not Found WIth ID:- " + foodId));
+
+        deleteFoodImage(food.getFoodImage());
+        foodRepository.delete(food);
+
+        return FoodMapper.convertToDTO(food);
+    }
+
+    @Override
+    public FoodResponseDTO updateFoodById(String foodId, FoodRequestDTO dto, 
+                                                MultipartFile foodImage) throws IOException{
+        var food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new NoSuchElementException("Food Not Found with id " + foodId));
+
+        food.setFoodName(dto.foodName());
+        food.setFoodPrice(dto.foodPrice());
+        food.setFoodDescription(dto.foodDescription());
+
+        if(dto.categoryId() != null && !dto.categoryId().isEmpty()) {
+            var catgeory = categoryService.getCategoryById(dto.categoryId());
+            food.setCategory(catgeory);
+        }
+
+        if(foodImage != null && !foodImage.isEmpty()) {
+            deleteFoodImage(food.getFoodImage());
+            var newFoodImageName = uploadFile(foodImage);
+            food.setFoodImage(newFoodImageName);
+        }
+
+        var savedFood = foodRepository.save(food);
+        return FoodMapper.convertToDTO(savedFood);
+    }
+
+    private void deleteFoodImage(String foodImageName) throws IOException{
+        var file = new File(FILE_DIR + File.separator + foodImageName);
+
+        if(!file.exists()) {
+            throw new FileNotFoundException("Food Image Not Found");
+        }
+
+        file.delete();
+    }
+
     private String uploadFile(MultipartFile foodImage) throws IOException{
         if(!foodImage.isEmpty()) {
             var fileName = foodImage.getOriginalFilename(); // it extract the full name (including extension)

@@ -17,6 +17,6 @@ public class HelloController {
 
     @GetMapping("/contact")
     public String contact() {
-        return "Conatct Works";
+        return "Contact Works";
     }
 }

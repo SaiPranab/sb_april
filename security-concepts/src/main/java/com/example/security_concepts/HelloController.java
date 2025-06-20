@@ -12,6 +12,7 @@ public class HelloController {
 
     @GetMapping("/about")
     public String about() {
+        System.out.println("Controller executed");
         return "About Works";
     }
 

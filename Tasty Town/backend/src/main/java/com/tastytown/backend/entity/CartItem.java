@@ -1,14 +1,11 @@
 package com.tastytown.backend.entity;
 
-import com.tastytown.backend.constants.Role;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,21 +14,22 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Builder
-public class User {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String userId;
+    private String cartItemId;
 
-    @Column(unique = true, nullable = false)
-    private String userEmail;
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
 
-    private String userPassword;
+    @ManyToOne
+    @JoinColumn(name = "food_id", nullable = false)
+    private Food food;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    private int quantity;
 }

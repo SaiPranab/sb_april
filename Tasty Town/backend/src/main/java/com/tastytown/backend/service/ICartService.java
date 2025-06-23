@@ -14,5 +14,5 @@ public interface ICartService {
 
     CartResponseDTO removeItemFromCart(String userId, String foodId);
 
-    CartResponseDTO clearCartItems(String userId);
+    void clearCartItems(String userId);
 }

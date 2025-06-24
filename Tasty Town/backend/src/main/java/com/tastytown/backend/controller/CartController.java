@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,19 @@ public class CartController {
     @GetMapping
     public ResponseEntity<CartResponseDTO> getCartByUserId(@RequestAttribute String userId) {
         return ResponseEntity.ok(cartService.getCartByUserId(userId));
+    }
+
+    @PutMapping
+    public ResponseEntity<CartResponseDTO> updateCartItemsQuantit(@RequestAttribute String userId,
+                                                @RequestBody CartItemRequestDTO dto) {
+        return ResponseEntity.ok(cartService.updateItemQuantity(userId, dto));
+    }
+
+    @DeleteMapping("/item/{foodId}")
+    public ResponseEntity<CartResponseDTO> removeItemFromCart(@RequestAttribute String userId,
+                                                                    @PathVariable String foodId) {  
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                                .body(cartService.removeItemFromCart(userId, foodId));
     }
 
     @DeleteMapping

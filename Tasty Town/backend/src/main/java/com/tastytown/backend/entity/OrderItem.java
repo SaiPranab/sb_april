@@ -1,6 +1,5 @@
 package com.tastytown.backend.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,29 +7,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Builder
-public class CartItem {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String cartItemId;
-
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
+    private String orderItemId;
 
     @ManyToOne
-    @JoinColumn(name = "food_id", nullable = false)
-    private Food food;
+    @JoinColumn(name = "order_id")
+    private Order order;
 
+    private String foodName;
+    private String foodPrice;
     private int quantity;
 }

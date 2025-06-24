@@ -66,14 +66,32 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public CartResponseDTO updateItemQuantity(String userId, CartItemRequestDTO cartItemRequestDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateItemQuantity'");
+        var user = getUserById(userId);
+        var cart = getOrCreateCartForUser(user);
+
+        var cartItem = getMatchedCartItemOfAnUser(cart, cartItemRequestDTO.foodId());
+
+        if (cartItemRequestDTO.quantity() <= 0) {
+            // remove the item
+            cart.getItems().remove(cartItem);
+        } else {
+            cartItem.setQuantity(cartItemRequestDTO.quantity());
+        }
+
+        var savedCart = cartRepository.save(cart);
+        return CartMapper.convertToCartResponseDTO(savedCart);
     }
 
     @Override
     public CartResponseDTO removeItemFromCart(String userId, String foodId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeItemFromCart'");
+        var user = getUserById(userId);
+        var cart = getOrCreateCartForUser(user);
+        var cartItem = getMatchedCartItemOfAnUser(cart, foodId);
+
+        cart.getItems().remove(cartItem);
+        var savedCart = cartRepository.save(cart);
+
+        return CartMapper.convertToCartResponseDTO(savedCart);
     }
 
     @Override
@@ -83,6 +101,12 @@ public class CartServiceImpl implements ICartService {
     }
 
     // helper methods
+    private CartItem getMatchedCartItemOfAnUser(Cart cart, String foodId) {
+        return cart.getItems().stream()
+                .filter(item -> item.getFood().getFoodId().equals(foodId))
+                .findFirst().orElseThrow(() -> new NoSuchElementException("Food Not Found In the Cart"));
+    }
+
     private User getUserById(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id " + userId));

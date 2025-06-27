@@ -18,3 +18,10 @@ spring:
 upload:
   file:
     dir: images
+
+order:
+  delivery:
+    fee: 40
+
+  tax:
+    rate: 0.1

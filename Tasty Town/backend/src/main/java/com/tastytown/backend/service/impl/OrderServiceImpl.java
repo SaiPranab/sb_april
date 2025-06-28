@@ -2,9 +2,12 @@ package com.tastytown.backend.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.StringJoiner;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.tastytown.backend.constants.OrderStatus;
@@ -52,20 +55,26 @@ public class OrderServiceImpl implements IOrderServicde{
 
     @Override
     public List<OrderDTO> getOrdersByUser(String userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getOrdersByUser'");
+        var user = userServiceHelper.getUserById(userId);
+
+        return orderRepository.findAllByUser(user, Sort.by(Direction.DESC, "orderDateTime"))
+                .stream().map(OrderMapper :: convertToOrderDTO).toList();
     }
 
     @Override
     public List<OrderDTO> getAllOrders() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllOrders'");
+        var orders = orderRepository.findAll(Sort.by(Direction.DESC, "orderDateTime"));
+        return orders.stream().map(OrderMapper :: convertToOrderDTO ).toList();
     }
 
     @Override
     public OrderDTO updateOrderStatus(String orderCode, OrderStatus status) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateOrderStatus'");
+        var order = orderRepository.findByOrderCode(orderCode)
+            .orElseThrow(() -> new NoSuchElementException("Order Not Found with code:- " + orderCode));
+        
+        order.setOrderStatus(status);
+        var savedOrder = orderRepository.save(order); 
+        return OrderMapper.convertToOrderDTO(savedOrder);
     }
     
 
